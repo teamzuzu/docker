@@ -2,6 +2,7 @@ version: "3.8"
 
 services:
   cloudbeaver:
+      network: host
       image: dbeaver/cloudbeaver:latest
       container_name: "dbeaver"
       restart: always
