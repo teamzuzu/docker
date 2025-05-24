@@ -1,0 +1,44 @@
+services:
+  db:
+    image: mariadb:11.6
+    environment:
+      - MYSQL_ROOT_PASSWORD=passw0rd
+      - MYSQL_USER=observium
+      - MYSQL_PASSWORD=passw0rd
+      - MYSQL_DATABASE=observium
+      - TZ=Europe/London
+    volumes:
+      - /data/obvs/data:/var/lib/mysql
+    networks:
+      - back-tier
+    restart: unless-stopped
+
+  app:
+    # Launch published image.
+    image: mbixtech/observium:latest
+    extra_hosts:
+      - "derpy:100.64.64.3"
+
+    environment:
+      - OBSERVIUM_ADMIN_USER=admin
+      - OBSERVIUM_ADMIN_PASS=admin
+      - OBSERVIUM_DB_HOST=db
+      - OBSERVIUM_DB_NAME=observium
+      - OBSERVIUM_DB_USER=observium
+      - OBSERVIUM_DB_PASS=observium
+      - OBSERVIUM_BASE_URL=https://obvs.teamz.site
+      - TZ=Europe/London
+    volumes:
+      - /data/obvs/logs:/opt/observium/logs
+      - /data/obvs/rrd:/opt/observium/rrd
+    networks:
+      - back-tier
+    ports:
+      - "1234:80"
+    restart: unless-stopped
+    depends_on:
+      - db
+
+networks:
+  back-tier:
+    driver: bridge
