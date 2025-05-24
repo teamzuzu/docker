@@ -18,6 +18,7 @@ services:
     image: mbixtech/observium:latest
     extra_hosts:
       - "derpy:100.64.64.3"
+      - "ranch:100.64.64.12"
 
     environment:
       - OBSERVIUM_ADMIN_USER=admin
